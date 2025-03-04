@@ -40,3 +40,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.logout-button {
+  position: fixed; /* Użyj fixed, aby przycisk był zawsze widoczny */
+  top: 20px; /* Odstęp od góry */
+  right: 20px; /* Odstęp od prawej strony */
+  padding: 10px 20px; /* Wewnętrzny padding */
+  background-color: #f5f5dc; /* Kremowy kolor tła */
+  color: #333; /* Ciemny kolor tekstu */
+  border: 1px solid #ccc; /* Subtelna ramka */
+  border-radius: 5px; /* Zaokrąglone rogi */
+  cursor: pointer; /* Kursor wskazujący */
+  font-size: 16px; /* Rozmiar czcionki */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lekki cień */
+  transition: background-color 0.3s ease; /* Płynna zmiana koloru */
+  width: 100px;;
+}
+
+.logout-button:hover {
+  background-color: #e0e0c0; /* Nieco ciemniejszy kremowy kolor po najechaniu */
+}

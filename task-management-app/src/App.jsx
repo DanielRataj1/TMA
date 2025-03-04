@@ -8,7 +8,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Dodano stan ładowania
+  const [isLoading, setIsLoading] = useState(true); // Stan ładowania
 
   // Funkcja do sprawdzania, czy użytkownik jest zalogowany
   const checkAuth = async () => {
@@ -56,10 +56,11 @@ const App = () => {
     setUserId(userId);
   };
 
+  // Funkcja do wylogowania
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    setUserId(null);
+    localStorage.removeItem('token'); // Usuń token z localStorage
+    setIsLoggedIn(false); // Ustaw stan isLoggedIn na false
+    setUserId(null); // Zresetuj userId
   };
 
   // Jeśli aplikacja jest w trakcie ładowania, wyświetl komunikat
@@ -71,7 +72,10 @@ const App = () => {
     <div className="app">
       {isLoggedIn ? (
         <div>
-          <button onClick={handleLogout} className="logout-button">Logout</button>
+          {/* Przycisk wylogowania */}
+          <button onClick={handleLogout} className="logout-button">
+            Wyloguj
+          </button>
           <ListManager userId={userId} />
         </div>
       ) : showRegister ? (
