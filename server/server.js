@@ -174,3 +174,19 @@ app.delete('/api/tasks/:id', authenticateToken, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+app.get('/api/validate-token', authenticateToken, async (req, res) => {
+  const { userId } = req.user;
+
+  try {
+    // Możesz dodatkowo sprawdzić, czy użytkownik istnieje w bazie danych
+    const user = await User.findById(userId);
+    if (user) {
+      res.json({ success: true, userId });
+    } else {
+      res.status(404).json({ success: false, message: 'User not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
