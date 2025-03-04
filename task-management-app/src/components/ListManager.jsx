@@ -11,7 +11,27 @@ const ListManager = ({ userId }) => {
   const [newTaskTitles, setNewTaskTitles] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedListTitle, setSelectedListTitle] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // Stan dla wyszukiwania
 
+  // Funkcja do filtrowania zadań na podstawie wyszukiwanej frazy
+  const filterTasks = (tasks, query) => {
+    if (!query) return tasks;
+
+    return tasks.filter(task => {
+      const titleMatch = task.title.toLowerCase().includes(query.toLowerCase());
+      const descriptionMatch = task.description?.toLowerCase().includes(query.toLowerCase());
+      return titleMatch || descriptionMatch;
+    });
+  };
+
+  // Efekt do pobierania list i zadań
+  useEffect(() => {
+    if (userId) {
+      fetchLists();
+    }
+  }, [userId]);
+
+  // Funkcja do pobierania list
   const fetchLists = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -26,6 +46,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do pobierania zadań
   const fetchTasks = async (listId) => {
     const token = localStorage.getItem('token');
     try {
@@ -39,12 +60,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
-  useEffect(() => {
-    if (userId) {
-      fetchLists();
-    }
-  }, [userId]);
-
+  // Funkcja do dodawania listy
   const addList = async () => {
     if (!newListTitle || !userId) {
       console.error('Title and userId are required.');
@@ -74,6 +90,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do usuwania listy
   const deleteList = async (listId) => {
     const list = lists.find(list => list._id === listId);
     if (!list) return;
@@ -101,6 +118,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do dodawania zadania
   const addTask = async (listId, title) => {
     if (!title || !listId) {
       console.error('Title and listId are required.');
@@ -133,6 +151,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do usuwania zadania
   const deleteTask = async (taskId, listId) => {
     const token = localStorage.getItem('token');
     try {
@@ -154,6 +173,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do aktualizacji opisu zadania
   const updateTaskDescription = async (taskId, description) => {
     const token = localStorage.getItem('token');
     try {
@@ -182,6 +202,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do obsługi przeciągania i upuszczania
   const onDragEnd = async (result) => {
     const { source, destination, draggableId } = result;
 
@@ -231,6 +252,7 @@ const ListManager = ({ userId }) => {
     }
   };
 
+  // Funkcja do obsługi kliknięcia na zadanie
   const handleTaskClick = (task, listId) => {
     const list = lists.find(list => list._id === listId);
     if (list) {
@@ -243,6 +265,17 @@ const ListManager = ({ userId }) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="list-manager">
         <h1 className="board-title">Twoja tablica :)</h1>
+
+        {/* Pole wyszukiwania */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Wyszukaj zadania..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
         <div className="add-list-container">
           <input
             type="text"
@@ -252,6 +285,7 @@ const ListManager = ({ userId }) => {
           />
           <button onClick={addList}>Add List</button>
         </div>
+
         <div className="lists-container">
           {lists.map(list => (
             <Droppable key={list._id} droppableId={list._id}>
@@ -264,7 +298,7 @@ const ListManager = ({ userId }) => {
                   <h3>{list.title}</h3>
                   <button onClick={() => deleteList(list._id)}>Delete</button>
                   <div className="tasks-container">
-                    {(tasks[list._id] || []).map((task, index) => (
+                    {filterTasks(tasks[list._id] || [], searchQuery).map((task, index) => (
                       <Draggable key={task._id} draggableId={task._id} index={index}>
                         {(provided) => (
                           <div

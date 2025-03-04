@@ -276,3 +276,15 @@
 .task-card button:hover {
   background-color: #cc0000;
 }
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
