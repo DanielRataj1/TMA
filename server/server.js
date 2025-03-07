@@ -119,8 +119,11 @@ app.get('/api/tasks', authenticateToken, async (req, res) => {
   const { userId } = req.user;
 
   try {
+    // Pobierz listy użytkownika
     const lists = await List.find({ userId });
     const listIds = lists.map(list => list._id);
+
+    // Pobierz zadania przypisane do tych list
     const tasks = await Task.find({ listId: { $in: listIds } });
     res.json(tasks);
   } catch (err) {
@@ -136,6 +139,13 @@ app.post('/api/tasks', authenticateToken, async (req, res) => {
   }
 
   try {
+    // Sprawdź, czy lista istnieje
+    const list = await List.findById(listId);
+    if (!list) {
+      return res.status(404).json({ message: 'List not found' });
+    }
+
+    // Zapisz zadanie z listId
     const task = new Task({ title, description, listId });
     await task.save();
     res.status(201).json(task);

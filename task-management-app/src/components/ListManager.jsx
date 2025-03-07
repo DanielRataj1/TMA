@@ -298,25 +298,25 @@ const ListManager = ({ userId }) => {
                   <h3>{list.title}</h3>
                   <button onClick={() => deleteList(list._id)}>Delete</button>
                   <div className="tasks-container">
-                    {filterTasks(tasks[list._id] || [], searchQuery).map((task, index) => (
-                      <Draggable key={task._id} draggableId={task._id} index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                          >
-                            <TaskCard
-                              task={task}
-                              onDelete={(taskId) => deleteTask(taskId, list._id)}
-                              onClick={() => handleTaskClick(task, list._id)}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
+  {filterTasks(tasks[list._id] || [], searchQuery).map((task, index) => (
+    <Draggable key={task._id} draggableId={task._id} index={index}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <TaskCard
+            task={task}
+            onDelete={(taskId) => deleteTask(taskId, list._id)}
+            onClick={() => handleTaskClick(task, list._id)}
+            dragHandleProps={provided.dragHandleProps}
+          />
+        </div>
+      )}
+    </Draggable>
+  ))}
+  {provided.placeholder}
+</div>
                   <div className="add-task-container">
                     <input
                       type="text"
