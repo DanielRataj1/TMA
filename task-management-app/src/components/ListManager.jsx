@@ -174,7 +174,7 @@ const ListManager = ({ userId }) => {
   };
 
   // Funkcja do aktualizacji opisu zadania
-  const updateTaskDescription = async (taskId, description) => {
+  const updateTaskDescription = async (taskId, description, priority) => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
@@ -183,17 +183,17 @@ const ListManager = ({ userId }) => {
           'Content-Type': 'application/json',
           'Authorization': token,
         },
-        body: JSON.stringify({ description }),
+        body: JSON.stringify({ description, priority }), // Dodaj priorytet do żądania
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update task');
       }
-
+  
       const updatedTasks = { ...tasks };
       for (const listId in updatedTasks) {
         updatedTasks[listId] = updatedTasks[listId].map(task =>
-          task._id === taskId ? { ...task, description } : task
+          task._id === taskId ? { ...task, description, priority } : task
         );
       }
       setTasks(updatedTasks);

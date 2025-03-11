@@ -29,6 +29,7 @@ const TaskSchema = new mongoose.Schema({
   description: { type: String },
   completed: { type: Boolean, default: false },
   listId: { type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true },
+  priority: { type: String, enum: ['low', 'medium', 'high'], default: 'medium' }, // Dodaj pole priority
 });
 
 const Task = mongoose.model('Task', TaskSchema);
@@ -132,21 +133,19 @@ app.get('/api/tasks', authenticateToken, async (req, res) => {
 });
 
 app.post('/api/tasks', authenticateToken, async (req, res) => {
-  const { title, description, listId } = req.body;
+  const { title, description, listId, priority } = req.body;
 
   if (!title || !listId) {
     return res.status(400).json({ message: 'Title and listId are required' });
   }
 
   try {
-    // Sprawdź, czy lista istnieje
     const list = await List.findById(listId);
     if (!list) {
       return res.status(404).json({ message: 'List not found' });
     }
 
-    // Zapisz zadanie z listId
-    const task = new Task({ title, description, listId });
+    const task = new Task({ title, description, listId, priority });
     await task.save();
     res.status(201).json(task);
   } catch (err) {
@@ -156,12 +155,12 @@ app.post('/api/tasks', authenticateToken, async (req, res) => {
 
 app.put('/api/tasks/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const { title, description, completed, listId } = req.body;
+  const { title, description, completed, listId, priority } = req.body;
 
   try {
     const task = await Task.findByIdAndUpdate(
       id,
-      { title, description, completed, listId },
+      { title, description, completed, listId, priority },
       { new: true }
     );
     res.json(task);
