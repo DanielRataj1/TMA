@@ -4,10 +4,9 @@ const Register = ({ onRegister }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleRegister = async (e) => {
+    e.preventDefault(); // Zapobiegaj domyślnej akcji formularza
 
     if (!username || !password) {
       setError('Username and password are required.');
@@ -24,23 +23,22 @@ const Register = ({ onRegister }) => {
       const data = await response.json();
 
       if (data.success) {
-        setError('');
-        setSuccess('User registered successfully!');
+        localStorage.setItem('token', data.token); // Zapisz token w localStorage
         onRegister(data.userId); // Przekaż userId do funkcji onRegister
       } else {
-        setError(data.message || 'Registration failed.');
+        setError('Rejestracja nie powiodła się');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError('Wystąpił błąd podczas rejestracji. Spróbuj ponownie.');
+      console.error('Błąd rejestracji:', err);
     }
   };
 
   return (
     <div className="register-container">
-      <h2>Register</h2>
+      <h2>Rejestracja</h2>
       {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleRegister}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -61,7 +59,7 @@ const Register = ({ onRegister }) => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Zarejestruj się</button>
       </form>
     </div>
   );
