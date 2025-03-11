@@ -117,15 +117,14 @@ app.delete('/api/lists/:id', authenticateToken, async (req, res) => {
 });
 
 app.get('/api/tasks', authenticateToken, async (req, res) => {
-  const { userId } = req.user;
+  const { listId } = req.query;
+
+  if (!listId) {
+    return res.status(400).json({ message: 'listId is required' });
+  }
 
   try {
-    // Pobierz listy użytkownika
-    const lists = await List.find({ userId });
-    const listIds = lists.map(list => list._id);
-
-    // Pobierz zadania przypisane do tych list
-    const tasks = await Task.find({ listId: { $in: listIds } });
+    const tasks = await Task.find({ listId }); // Pobierz zadania tylko dla tej listy
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });

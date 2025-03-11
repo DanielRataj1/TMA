@@ -58,9 +58,10 @@ const App = () => {
 
   // Funkcja do wylogowania
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Usuń token z localStorage
+    localStorage.removeItem('token'); // Usuń token
     setIsLoggedIn(false); // Ustaw stan isLoggedIn na false
     setUserId(null); // Zresetuj userId
+    setTasks({}); // Wyczyść stan tasks
   };
 
   // Jeśli aplikacja jest w trakcie ładowania, wyświetl komunikat

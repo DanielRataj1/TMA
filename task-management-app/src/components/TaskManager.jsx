@@ -7,22 +7,21 @@ const TaskManager = ({ userId }) => {
   // Pobierz zadania po zalogowaniu
   useEffect(() => {
     if (userId) {
-      fetchTasks();
+      fetchLists();
     }
   }, [userId]);
 
   // Funkcja do pobierania zadań
-  const fetchTasks = async () => {
+  const fetchTasks = async (listId) => {
+    const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks?userId=${userId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch tasks');
-      }
+      const response = await fetch(`http://localhost:5000/api/tasks?listId=${listId}`, {
+        headers: { 'Authorization': token },
+      });
       const data = await response.json();
-      setTasks(data);
+      setTasks(prev => ({ ...prev, [listId]: data }));
     } catch (err) {
-      console.error('Error fetching tasks:', err.message);
-      setTasks([]); // Ustaw tasks na pustą tablicę w przypadku błędu
+      console.error('Error fetching tasks:', err);
     }
   };
 
