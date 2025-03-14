@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ListManager from './components/ListManager';
 import './App.css';
+import logo from './assets/logo.jpg'; // Dodaj tę linię
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -71,6 +72,7 @@ const App = () => {
 
   return (
     <div className="app">
+      <img src={logo} alt="Task Management App Logo" className="app-logo" />
       {isLoggedIn ? (
         <div>
           {/* Przycisk wylogowania */}

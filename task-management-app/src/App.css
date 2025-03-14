@@ -60,3 +60,10 @@
 .logout-button:hover {
   background-color: #e0e0c0; /* Nieco ciemniejszy kremowy kolor po najechaniu */
 }
+
+.app-logo {
+  width: 300px; /* Dostosuj rozmiar */
+  height: auto;
+  margin: 20px auto; /* Wyśrodkowanie i odstęp */
+  display: block; /* Wyśrodkowanie działa z block */
+}
