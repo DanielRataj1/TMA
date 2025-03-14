@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongoose": "^8.10.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
   }
 }
